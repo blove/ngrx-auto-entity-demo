@@ -12,7 +12,7 @@ cd ngrx-auto-entity-demo
 
 ```bash
 yarn add @briebug/ngrx-auto-entity
-yarn add @angular/cdk @angular/flex-layout @angular/material @ngrx/{effects,store,schematics} concurrently json-server
+yarn add @angular/cdk @angular/flex-layout @angular/material @ngrx/{effects,store,store-devtools} concurrently json-server
 ```
 
 ## Setup Proxy
@@ -192,4 +192,39 @@ Open **src/app/state/state.module.ts** and import the `EffectsModule`:
   providers: [EntityOperators]
 })
 export class StateModule {}
+```
+
+## Update `AccountsComponent`
+
+Open **src/app/containers/accounts/accounts.components.ts** and update the component to use the NgRx Auto Entity library:
+
+```javascript
+export class AccountsComponent implements OnInit {
+  accounts: Observable<Array<Account>>;
+
+  constructor(private store: Store<AppState>) {}
+
+  ngOnInit() {
+    this.store.dispatch(new LoadMany(Account));
+    this.accounts = this.store.pipe(select(selectAllAccounts));
+  }
+
+  onDelete(account: Account) {
+    this.store.dispatch(new Delete(Account, account));
+  }
+}
+```
+
+* We inject the `store` just like we're used to with NgRx.
+* Dispatch the `LoadMany()` action specifying the entity class and the entity instance.
+* Use the generated `selectAll` selector to get the array of ordered entities.
+* Dispatch the `Delete()` action specifying the entity class and the entity instance.
+
+## Select and Edit
+
+Checkout the **02-select-edit-account** branch and serve the application:
+
+```bash
+git checkout 02-select-edit-account
+yarn start
 ```

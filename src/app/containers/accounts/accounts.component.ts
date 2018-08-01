@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Delete, LoadMany } from '@briebug/ngrx-auto-entity';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { Router } from '../../../../node_modules/@angular/router';
 import { selectAllAccounts } from '../../state/account/account.reducer';
 import { AppState } from '../../state/app.interfaces';
 import { Account } from './../../models/account';
@@ -37,10 +38,9 @@ const accounts: Account[] = [
 export class AccountsComponent implements OnInit {
   accounts: Observable<Array<Account>>;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
-    // this.accounts = of(accounts);
     this.store.dispatch(new LoadMany(Account));
     this.accounts = this.store.pipe(select(selectAllAccounts));
   }
@@ -50,6 +50,6 @@ export class AccountsComponent implements OnInit {
   }
 
   onEdit(account: Account) {
-    // todo
+    this.router.navigate([account.id]);
   }
 }

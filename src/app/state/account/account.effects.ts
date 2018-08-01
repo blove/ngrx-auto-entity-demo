@@ -5,7 +5,8 @@ import {
   EntityOperators,
   Load,
   LoadMany,
-  ofEntityType
+  ofEntityType,
+  Update
 } from '@briebug/ngrx-auto-entity';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -33,6 +34,12 @@ export class AccountEffects {
   delete$ = this.actions$.pipe(
     ofEntityType<Account, Delete<Account>>(Account, EntityActionTypes.Delete),
     this.ops.delete()
+  );
+
+  @Effect()
+  update$ = this.actions$.pipe(
+    ofEntityType<Account, Update<Account>>(Account, EntityActionTypes.Update),
+    this.ops.update()
   );
 
   constructor(private actions$: Actions, private ops: EntityOperators) {}

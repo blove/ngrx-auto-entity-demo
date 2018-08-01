@@ -1,3 +1,17 @@
-<p>
-  account works!
-</p>
+<div fxLayout="row" fxLayoutAlign="center stretch" class="favorites">
+  <div fxFlex.xs="90%" fxFlex.sm="80%" fxFlex.md="70%" fxFlex.lg="65%" fxFlex.xl="60%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="mat-h1">Account</h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <nae-account-form [account]="account | async" (update)="onUpdate($event)"></nae-account-form>
+      </mat-card-content>
+    </mat-card>
+    <div fxLayout="row" fxLayoutAlign="end start" class="actions">
+      <button mat-stroked-button color="primary" (click)="onSave()">Save</button>
+    </div>
+  </div>
+</div>
