@@ -18,7 +18,7 @@ yarn add @angular/cdk @angular/flex-layout @angular/material @ngrx/{effects,stor
 ## Setup Proxy
 
 ```bash
-touch ~/repos/ngrx-auto-entity-demo/proxy.config.json
+touch ~/repos/ngrx-auto-entity-demo/proxy.conf.json
 ```
 
 1. Open **proxy.config.json** and run snippet: `nae-proxy-config`
@@ -59,6 +59,22 @@ cp -R ~/Desktop/nae-assets/components ~/repos/ngrx-auto-entity-demo/src/app
 cp -R ~/Desktop/nae-assets/containers ~/repos/ngrx-auto-entity-demo/src/app
 ```
 
+## Create `MaterialModule`
+
+Create **src/app/material.module.ts**:
+
+```bash
+touch ~/repos/ngrx-auto-entity-demo/src/app/material.module.ts
+```
+
+Snippet: `nae-material-module`
+
+Open **src/index.html** and add the Material icons:
+
+```html
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+```
+
 ## Setup Routing
 
 Open **src/app/app-routing.module.ts** and generate routes: `nae-routes`
@@ -70,16 +86,6 @@ Open **src/app/app.module.ts** and run snippet: `nae-app-module`.
 ## Update `AppComponent` Template
 
 Remove everything in **src/app/app.component.ts** except for the `<router-outlet>`.
-
-## Create `MaterialModule`
-
-Create **src/app/material.module.ts**:
-
-```bash
-touch ~/repos/ngrx-auto-entity-demo/src/app/material.module.ts
-```
-
-Snippet: `nae-material-module`
 
 ## Update Styles
 
@@ -125,6 +131,8 @@ mkdir ~/repos/ngrx-auto-entity-demo/src/app/state/account
 touch ~/repos/ngrx-auto-entity-demo/src/app/state/account/account.state.ts
 ```
 
+Generate the entity state using the snippet: `nae-account-state`.
+
 Open **src/app/state/app.interface.ts** and add the `account` state property:
 
 ```javascript
@@ -135,8 +143,6 @@ export interface AppState {
 }
 export type State = AppState;
 ```
-
-Generate the entity state using the snippet: `nae-account-state`.
 
 ## Create Entity Reducer
 
@@ -184,6 +190,9 @@ The `EntityOperators` class provides crud operations:
 Open **src/app/state/state.module.ts** and import the `EffectsModule`:
 
 ```javascript
+import { EffectsModule } from '@ngrx/effects';
+import { AccountEffects } from './account/account.effects';
+
 @NgModule({
   imports: [
     StoreModule.forRoot(appReducer, { metaReducers: appMetaReducers }),
@@ -199,6 +208,16 @@ export class StateModule {}
 Open **src/app/containers/accounts/accounts.components.ts** and update the component to use the NgRx Auto Entity library:
 
 ```javascript
+import { LoadMany, Delete } from '@briebug/ngrx-auto-entity';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../state/app.interfaces';
+import { selectAllAccounts } from '../../state/account/account.reducer';
+import { Account } from './../../models/account';
+
+@Component({
+  templateUrl: './accounts.component.html',
+  styleUrls: ['./accounts.component.scss']
+})
 export class AccountsComponent implements OnInit {
   accounts: Observable<Array<Account>>;
 
